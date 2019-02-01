@@ -7,9 +7,13 @@
 #include <eosiolib/print.hpp>
 #include <eosiolib/transaction.hpp>
 #include <eosiolib/crypto.h>
+//引入必要依赖包
 #include <eosiolib/dispatcher.hpp>
+
+//命名空间
 using namespace eosio;
 using namespace std;
+//合约必须继承至contract
 class hello : public contract {
   public:
       using contract::contract;
@@ -17,10 +21,18 @@ class hello : public contract {
       [[eosio::action]]
       void hi( name user ) {
 		print("game start");
+		//校验_self 权限
 		require_auth(_self);
 		auto values=user.value;
         	print("hello user value:",values);
 		print( ",: Hello ,: ", user);
+
+		//内联调用 语法说明
+		//action(
+		//permission_level, //权限
+		//code, 合约
+		//action, 合约方法
+		//data); 调用数据
       		action(permission_level{_self, name("active")},
               	name("eosio.token"), name("transfer"),
                 std::make_tuple(_self, user, asset(1, symbol("EOS", 4)),
