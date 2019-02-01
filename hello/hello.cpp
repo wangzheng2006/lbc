@@ -64,7 +64,14 @@ class hello : public contract {
 
 
 };
-
+ /**
+ * 合约调用入口
+ * push action 都是传到这个函数里面进行处理
+ * apply动作处理程序是一个侦听所有传入操作并执行所需行为的函数
+ * receiver, code, action。 receiver是当前正在处理该操作的帐户。code 是授权合约的帐户。 action是当前合约的方法。
+ * 每个智能合约都必须提供应用操作处理程序
+ * EOSIO_DISPATCH_CUSTOM 宏 封装了 apply
+ */
 
 #define EOSIO_DISPATCH_CUSTOM(TYPE, MEMBERS) \
 extern "C" { \
