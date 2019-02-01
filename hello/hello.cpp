@@ -41,17 +41,22 @@ class hello : public contract {
 	
 	[[eosio::action]]
 	void delay(string memo){
-		 eosio::transaction t{};
+
+		 eosio::transaction t{};//声明 transaction
+		 	//封装数据
        		 t.actions.emplace_back(eosio::permission_level(_self, name("active")),
         	                       name("test3"), name("hi"),
                                std::make_tuple(name("test1")));
+            //设置延时时间
         	t.delay_sec = 1;
+        	//发送交易数据
         	t.send(1, _self, false);
 		print("delay end");
 	}
 	[[eosio::action]]
 	void transfer(name from, name to, asset quantity, string memo) {
 		print("transfer from ",from);
+		// eosio_assert 如果判断条件不成立，则终止执行并打印错误信息（真实是直接不通过没有打印）
 		eosio_assert(0," transfer error");
 
 
