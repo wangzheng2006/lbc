@@ -14,10 +14,11 @@
 using namespace eosio;
 using namespace std;
 //合约必须继承至contract
-class hello : public contract {
+class [[eosio:contract]] hello : public contract {
   public:
       using contract::contract;
 
+	  // 声明action
       [[eosio::action]]
       void hi( name user ) {
 		print("game start");
@@ -59,11 +60,82 @@ class hello : public contract {
 		// eosio_assert 如果判断条件不成立，则终止执行并打印错误信息（真实是直接不通过没有打印）
 		eosio_assert(0," transfer error");
 
-
 		}
 
+	[[eosio::action]]
+		void add(name from,uint64_t phone){
 
+      	//构造函数 multi_index(uint64_t code, uint64_t scope)
+		//参数1 code拥有表的账户，可以对数据库有读写权限。
+		//参数2  scope 范围标识符。
+		work_index  works(_self,_self.value);
+
+		works.emplace(_self, [&](auto& work) {
+			work.account_name = from;
+			work.score = asset(1,symbol("EOS", 4));
+			work.phone = phone;
+		});
+      }
+
+	[[eosio::action]]
+	void update(name from ,uint64_t phone){
+		work_index works(_self,_self.value);
+		auto item=works.find(from.value);
+		if(item!=works.end()){
+			works.modify(item,_self,[&](auto& work){
+				work.phone=phone;
+			});
+		}
+	}
+
+	[[eosio::action]]
+	void adds(name from){
+		test_index t(_self,_self.value);
+		t.emplace(_self,[&](auto& test){
+			test.id=t.available_primary_key();
+		});
+		print("add end");
+	}
+
+	struct [[eosio::table]] work{
+		uint64_t id;
+		name worker;
+		asset token;
+		uint64_t score;
+		uint64_t creat_time;
+		//主键
+		uint64_t primary_key() const {  return id; }
+
+		//序列化数据。
+		EOSLIB_SERIALIZE( work, (id)(worker)(token)(score)(creat_time))
+	};
+
+	struct [[eosio::table]] work{
+		name worker;//姓名
+		asset score;//token数量
+		uint64_t phone;//电话
+		//主键
+		uint64_t primary_key() const {  return worker.value; }
+		//二级索引
+		uint64_t get_phone() const { return phone; }
+		//序列化数据。
+		EOSLIB_SERIALIZE( work, (worker)(score)(phone))
+	};
+
+	//参数1 表名称 最长 12 个字符，只能由小 写字母、数字 1-5、“.”组成。
+	//参数2 表对象 表中 行的定义
+	//参数3 可变参数index  最多支持16个 必须返回结构中定义的常量类型，返回二级索引或者引用
+	typedef eosio::multi_index<"work"_n, work ,
+			indexed_by<"phone"_n, const_mem_fun<work, uint64_t, &work:: get_phone>>> work_index;
+
+	struct [[eosio::table]] test{
+		uint64_t id;
+		uint64_t primary_key() const { return id;}
+		EOSLIB_SERIALIZE( test, (id))
+	};
+	typedef eosio::multi_index<name("test"),test > test_index;
 };
+
  /**
  * 合约调用入口
  * push action 都是传到这个函数里面进行处理
@@ -72,7 +144,6 @@ class hello : public contract {
  * 每个智能合约都必须提供应用操作处理程序
  * EOSIO_DISPATCH_CUSTOM 宏 封装了 apply
  */
-
 #define EOSIO_DISPATCH_CUSTOM(TYPE, MEMBERS) \
 extern "C" { \
    void apply( uint64_t receiver, uint64_t code, uint64_t action ) { \
@@ -87,6 +158,6 @@ extern "C" { \
 } \
 
 
-EOSIO_DISPATCH_CUSTOM( hello, (hi)(delay)(transfer))
+EOSIO_DISPATCH_CUSTOM( hello,(hi)(delay)(transfer)(add)(update)(del)(adds))
 
 
