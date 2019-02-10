@@ -54,6 +54,7 @@ class [[eosio:contract]] hello : public contract {
         	t.send(1, _self, false);
 		print("delay end");
 	}
+
 	[[eosio::action]]
 	void transfer(name from, name to, asset quantity, string memo) {
 		print("transfer from ",from);
