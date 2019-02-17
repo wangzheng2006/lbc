@@ -90,6 +90,16 @@ class [[eosio:contract]] hello : public contract {
 	}
 
 	[[eosio::action]]
+	void query(uint64_t phone){
+		work_index works(_self,_self.value);
+		auto workeritem= works.get_index<"phone"_n>();
+		auto item=workeritem.find(phone);
+		print("query name:",item->worker);
+
+	}
+
+
+	[[eosio::action]]
 	void adds(name from){
 		test_index t(_self,_self.value);
 		t.emplace(_self,[&](auto& test){
