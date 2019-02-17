@@ -8,13 +8,4 @@
 .DS_Store
 /.externalToolBuilders/
 /src/test/
-hxkj.iml
-{
-  "rows": [
-    {
-      "account": "account",
-      "balance": 1000
-    }
-  ],
-  "more": false
-}
+/node_modules/
