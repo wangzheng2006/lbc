@@ -32,22 +32,11 @@ export default {
     },
     confirm() {
       if (this.eotnum == "") {
-        alert("请输入回购EOT数量");
+        alert("请输入回购数量");
         return;
       }
-      this.showLoading=true;
-      var obj = this;
 
-      this.$statterUtil.sellEot(obj.eotnum).then(function(result) {
-        if (result == "1") {
-          alert("回购成功！");
-          obj.$emit("confirm", obj.eotnum,"1");
-        } else {
-          obj.$emit("confirm", obj.eotnum,"0");
-         alert("回购失败！"+result);
-        }
-        obj.showLoading=false;
-      });
+
     },
     formatnum(num) {
       return parseFloat((num / 10) * 1.25).toFixed(4);

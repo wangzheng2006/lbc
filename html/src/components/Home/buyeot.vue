@@ -50,27 +50,8 @@ export default {
         alert("请输入购买量");
         return;
       }
-      this.showLoading=true;
-      var memo = "";
-      var obj = this;
-      if (this.share != "") {
-        memo = ":share:" + this.share;
-      }
-      if(this.share==undefined){
-        memo="";
-      }
-      this.$statterUtil.buyEot(obj.buynum,memo).then(function(result) {
-        if (result == "1") {
-          obj.$emit("confirm", obj.buynum, "1");
-          alert("购买成功！");
-        } else {
-          obj.$emit("confirm", obj.buynum, "0");
-          alert("购买失败"+result);
-        }
-        obj.showLoading=false;
-      });
 
-      // this.$emit("confirm", this.buynum);
+
     },
 
     formatnum(num) {
