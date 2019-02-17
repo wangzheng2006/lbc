@@ -10,16 +10,16 @@
       
       <!-- KPI-->
       <div class="eto-info">
-        <div class="balance-title">余额(KPI)</div>
-        <div class="balance-value">{{usereot}}</div>
+        <div class="balance-title">余额(EOS)</div>
+        <div class="balance-value">{{usereos}}</div>
         <div class="match-box">
           <div class="box-item">
-            <div class="balance-title">累计获得(KPI)</div>
+            <div class="balance-title">KPI数量</div>
             <div class="item-value">0.0000</div>
           </div>
          
           <div class="box-item">
-            <div class="balance-title">本期回购</div>
+            <div class="balance-title">回购</div>
             <div class="item-value">{{backeot}}</div>
           </div>
         </div>
@@ -27,13 +27,12 @@
 
       <!-- 购买和回购 -->
       <div class="tool-box">
-        <button  @click="showBuyEotInfo = true">KPI 购买<i class="iconfont e-Path" /></button>
+        <button  @click="showBuyEotInfo = true">KPI 交易<i class="iconfont e-Path" /></button>
         <button  @click="showSellEotInfo = true">KPI回购<i class="iconfont e-Shape1" /></button>
       </div>
 
       <!-- 邀请用户 -->
       <div class="invite-box">
-
         <div class="dialog-item" @click="showEtoInfo = true">
           <span>介绍</span>
           <i class="iconfont e-arrow" />
@@ -65,7 +64,7 @@ export default {
   data() {
     return {
       username: "",
-      usereot: "0.0000",
+      usereos: "0.0000",
       share: "",
       showLoading: false,
       backeot: "0.0000",
@@ -105,19 +104,7 @@ export default {
       this.share = this.$route.params.id;
       var obj = this;
       console.log("start");
-      Scatterutil.init().then(function(data) {
-        console.log(data);
-        Scatterutil.userinfo().then(function(result){
-          obj.username = result.name;
-        })
-      });
-      // this.$statterUtil.init().then(function(data) {
-      //   if (data == "false") {
-      //     obj.showLoading = false;
-      //   }
-      //   userinfo(obj);
-      //   buyback(obj);
-      // });
+
     }
   },
   components: {

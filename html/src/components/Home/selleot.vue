@@ -1,9 +1,9 @@
 <template lang="html">
   <div class="invite-selleot-box">
     <div class="inner-box">
-      <div class="dialog-title">回购EOT</div>
+      <div class="dialog-title">回购KPI</div>
       <div class="input-label">回购数量</div>
-      <input type="text" v-model="eotnum" placeholder="0.0000 EOT" />
+      <input type="text" v-model="eotnum" placeholder="0.0000 KPI" />
        <div class="input-label">{{formatnum(eotnum)}}(EOS)</div>
 
       <div class="buttons">

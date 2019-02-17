@@ -2,8 +2,8 @@
   <div class="invite-buy-box">
     <div class="inner-box">
       <div class="dialog-title">购买</div>
-      <div class="input-label">购买数量(EOS)</div>
-      <input type="number" v-model="buynum" placeholder="0.0000 EOS"  />
+      <div class="input-label">交易数量(KPI)</div>
+      <input type="number" v-model="buynum" placeholder="0.0000"  />
      <div class="input-label">{{formatnum(buynum)}}</div>
       <div class="buttons">
         <button @click="cancel">取消</button>
