@@ -121,17 +121,6 @@ class [[eosio:contract]] hello : public contract {
 		EOSLIB_SERIALIZE( work, (id)(worker)(token)(score)(creat_time))
 	};
 
-	struct [[eosio::table]] work{
-		name worker;//姓名
-		asset score;//token数量
-		uint64_t phone;//电话
-		//主键
-		uint64_t primary_key() const {  return worker.value; }
-		//二级索引
-		uint64_t get_phone() const { return phone; }
-		//序列化数据。
-		EOSLIB_SERIALIZE( work, (worker)(score)(phone))
-	};
 
 	//参数1 表名称 最长 12 个字符，只能由小 写字母、数字 1-5、“.”组成。
 	//参数2 表对象 表中 行的定义

@@ -1,4 +1,4 @@
-# eto-game
+# kpi-game
 
 ## Project setup
 ```
