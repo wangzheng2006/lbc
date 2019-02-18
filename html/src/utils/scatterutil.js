@@ -12,11 +12,11 @@ let scatter = null;
 let eosapi;
 
 const network = {
-    blockchain:'eos',
-    host:'150.109.41.13',
-    port:8888,
-    protocol:'http',
-    chainId:'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f'
+    blockchain: 'eos',
+    host: '150.109.41.13',
+    port: 8888,
+    protocol: 'http',
+    chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f'
 };
 
 const rpc = new JsonRpc('http://150.109.41.13:8888');
@@ -28,107 +28,51 @@ export default class Scatterutil {
 
     static async init() {
         //ES6 Promise
-        return new Promise(async resolve => {
-            ScatterJS.scatter.connect("kpigame").then(connected => {
-                if (!connected) {
-                resolve("false");
-                return false;
-            }
-            scatter = ScatterJS.scatter;
-            //
-            eosapi = scatter.eos(network, Api, { rpc, beta3:true });
-            // 必须清空对象防止泄露对象。
-            window.scatter = null;
-            resolve("true");
-        })
-    });
-}
-
-//获取授权用户
-static async userinfo() {
-
-    return new Promise(async resolve => {
-        scatter.getIdentity(requiredFields).then(() => {
-            let account = { name: "", eos: 0 };
-        if (scatter != null) {
-            if (scatter.identity != null) {
-                //获取EOS的account
-                const accounts = scatter.identity.accounts.find(x => x.blockchain === 'eos');
-                account.name = accounts.name;
-            }
-        }
-        resolve(account);
-
-    }).catch(error => {
-        resolve("");
-    console.error(error);
-});
-});
-};
-
-//获取授权用户
-static async userinfo() {
-
-    return new Promise(async resolve => {
-        scatter.getIdentity(requiredFields).then(() => {
-            let account = { name: "", eos: 0 };
-        if (scatter != null) {
-            if (scatter.identity != null) {
-                //获取EOS的account
-                const accounts = scatter.identity.accounts.find(x => x.blockchain === 'eos');
-                account.name = accounts.name;
-            }
-        }
-        resolve(account);
-
-    }).catch(error => {
-        resolve("");
-    console.error(error);
-});
-});
-};
-
-//转账
-static async transfer(num, memo) {
-    if (scatter == null) {
-        alert("请安装scatter插件！");
+        // return new Promise(async resolve => {
+        //     ScatterJS.scatter.connect("kpigame").then(connected => {
+        //         if (!connected) {
+        //             resolve("false");
+        //             return false;
+        //         }
+        //         scatter = ScatterJS.scatter;
+        //         //
+        //         eosapi = scatter.eos(network, Api, { rpc, beta3: true });
+        //         // 必须清空对象防止泄露对象。
+        //         window.scatter = null;
+        //         resolve("true");
+        //     })
+        // });
     }
-    return new Promise(async resolve => {
-        //
-        scatter.getIdentity(requiredFields).then(() => {
-            const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
-        const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
 
-    eosapi.transact({
-        actions: [{
-            account: 'eosio.token',
-            name: 'transfer',
-            authorization: [{
-                actor: account.name,
-                permission: account.authority ,
-            }],
-            data: {
-                from: account.name,
-                to: 'test1',
-                quantity: '1.0000 EOS',
-                memo: memo
-            },
-        }]
-    }, {
-        blocksBehind: 3,
-        expireSeconds: 30,
-    }).then(result => {
-        console.log(` Transaction ID: ${result.transaction_id}`);
-}).catch(error => {
-    console.log(error);
-});
+    //获取授权用户
+    static async userinfo() {
 
-}).catch(error => {
-    console.error(error);
-resolve("false");
-});
-});
-};
+        // return new Promise(async resolve => {
+        //     scatter.getIdentity(requiredFields).then(() => {
+        //         let account = { name: "", eos: 0 };
+        //         if (scatter != null) {
+        //             if (scatter.identity != null) {
+        //                 //获取EOS的account
+        //                 const accounts = scatter.identity.accounts.find(x => x.blockchain === 'eos');
+        //                 account.name = accounts.name;
+        //             }
+        //         }
+        //         resolve(account);
+
+        //     }).catch(error => {
+        //         resolve("");
+        //         console.error(error);
+        //     });
+        // });
+    };
+
+    //转账
+    static async transfer(num, memo) {
+        // if (scatter == null) {
+        //     alert("请安装scatter插件！");
+        // }
+       
+    };
 
 
 }

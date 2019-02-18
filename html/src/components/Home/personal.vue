@@ -116,21 +116,11 @@ export default {
 };
 
 function buyback(obj) {
-  // obj.$statterUtil.buyback().then(function(result) {
-  //   var objs = result.rows;
-  //   if (objs.length >= 1) {
-  //     var backs = parseFloat(objs[0].back) * 8;
-  //     obj.backeot = backs.toFixed(4);
-  //   }
-  // });
+ 
 }
 
 function userinfo(obj) {
-  // obj.$statterUtil.userinfo().then(function(result) {
-  //   obj.usereot = result.eot;
-  //   obj.username = result.name;
-  //   obj.showLoading = false;
-  // });
+ 
 }
 </script>
 

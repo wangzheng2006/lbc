@@ -22,24 +22,6 @@ const signatureProvider = new JsSignatureProvider([defaultPrivateKey]);
 const rpc = new JsonRpc('http://150.109.41.13:8888');
 const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
-// let eos = null;
-// const apis = Eos({
-//     httpEndpoint: "http://150.109.41.13:8888",
-//     chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f"
-// });
-// var config = {
-//   keyProvider: ['5JKFSKvJVjgRn4n3QRPoy4hSg76qZPXVnKuNcr3yhvXhpdMd5q2',
-//   '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3'], // WIF string or array of keys..
-//   httpEndpoint: 'http://150.109.41.13:8888',
-//   	port: 8888,
-//   expireInSeconds: 60,
-//   broadcast: true,
-//   debug: true,
-//   sign: true,
-//   authorization: null // 该参数用于在多签名情况下，识别签名帐号与权限,格式如：account@permission
-// }
- 
-// eos = Eos.Localnet(config);
 
 export default {
   
@@ -57,43 +39,35 @@ export default {
   },
   methods: {
     init() {
-     var options = {broadcast: true} //不广播此笔交易
-    api.transact({
-          actions: [{
-            account: 'eosio.token',
-            name: 'transfer',
-            authorization: [{
-              actor: 'test3',
-              permission: 'active',
-            }],
-            data: {
-              from: 'test3',
-              to: 'test1',
-              quantity:'0.0001 EOS',
-              memo: '123123',
-            },
-          }]
-        }, {
-          blocksBehind: 3,
-          expireSeconds: 30,
-        }).then(result => {
-					console.log(` Transaction ID: ${result.transaction_id}`);
+    //  var options = {broadcast: true} //不广播此笔交易
+    // api.transact({
+    //       actions: [{
+    //         account: 'eosio.token',
+    //         name: 'transfer',
+    //         authorization: [{
+    //           actor: 'test3',
+    //           permission: 'active',
+    //         }],
+    //         data: {
+    //           from: 'test3',
+    //           to: 'test1',
+    //           quantity:'0.0001 EOS',
+    //           memo: '123123',
+    //         },
+    //       }]
+    //     }, {
+    //       blocksBehind: 3,
+    //       expireSeconds: 30,
+    //     }).then(result => {
+		// 			console.log(` Transaction ID: ${result.transaction_id}`);
 
-				}).catch(error => {
-					console.log(error);
-				});
+		// 		}).catch(error => {
+		// 			console.log(error);
+		// 		});
      
-      // api.transfer({from: 'test3', to: 'test1', quantity: '1.0000 EOS', memo: ''}, 
-      // options,function(data){
-      //     alert("test");
-      //     alert("ttt:"+data);
-      // }) //从test3发送1个EOS到test1账户
-      // alert("sdsd");
 
       var obj=this;
-      // rpc.get_info({}).then(result => 
-      // syntax(result,obj)
-      // )
+    
 
       rpc.get_block(1).then(result => 
       syntax(result,obj)
