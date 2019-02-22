@@ -1,41 +1,77 @@
 <template lang="html">
-  <div class="eto-info-box">
+  <div class="game-info-box">
     <div class="inner-box">
-      <div class="eto-title">KPI</div>
+      <div class="eto-title">任务内容</div>
       <div class="eto-content">
-        <h2>介绍</h2>
-        <p >完成相应的任务经过系统评判后既会获得相应代币奖励</p>
+        <p style="font-size:20px">{{contenct}}</p>
+        <p style="font-size:16px;color:#2a84f8">
+          任务奖励：{{reward}}
+            </p>
       </div>
-      <button @click="$emit('close')">确定</button>
+      <button @click="cancel">领取</button>
+      <button @click="confirm">提交任务</button>
+
     </div>
   </div>
 </template>
 
 <script>
+import Scatterutil from "../../utils/scatterutil";
 
 export default {
+  props: {
+    id:String,
+    contenct:String,
+    reward:String,
+    required: true
+  },
+  data() {
+    return {
+      id: "",
+      contenct: "",
+      reward:""
+    };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+    },
+    //领取任务调用方法
+    cancel() {
+      
+      //转账方法
+      Scatterutil.transfer("1","taskid:"+this.id).then(result=>{
+        if(result=="true"){
+          alert("领取任务成功！")
+        }
+      });
+      this.$emit('close')
+    },
+    confirm() {
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-.eto-info-box{
+.game-info-box{
   position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  top: 150px;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 50%;
+  height: 100%;
   z-index: 1;
-    background: rgba(35,50,67,0.7);
-
   background-color: rgba(35,50,67,0.7);
   .inner-box{
-    width: 850px;
-	  height: 100%;
+      width: 650px;
+	  height: 550px;
 	  background-color: #ffffff;
-	  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.05);
+	  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.05);
 	  border-radius: 10px;
 
     .eto-title{
@@ -48,9 +84,9 @@ export default {
     .eto-content{
       width: 550px;
       margin: 14px auto 0;
-      padding: 20px 0;
+      padding: 30px 0;
       h2{
-        font-size: 22px;
+        font-size: 26px;
         color: #233243;
         font-weight: normal;
       }

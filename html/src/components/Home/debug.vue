@@ -1,16 +1,20 @@
 <template>
-  <div class="" style="width:100%">
-    <pre id="result">
-<div v-html="log" class="item-title" 
-            style="width:100%; font-size: 16px;
-            white-space:normal;
-            word-break:break-all;
-            word-wrap:break-word; ">
-            {{log}}</div>
-      </pre>
+  <div class="game-center">
+    <div class="item-title">任务中心</div>
+    <div class="theme-list">
+      <div class="theme-item" v-for="item in themeList" :key="item.title"  @click="receive(item.id)" > 
+        <i class="iconfont e-Shape" v-if="item.isHot" />
+        <i class="iconfont e-xingzhuang" v-else />
+        <div class="title">{{item.contenct}}</div>
+        <div class="num">{{item.reward}} </div>
+      </div>
+    </div>
+
+     <infos  v-bind:contenct="contenct" v-bind:id="id" v-bind:reward="reward" v-if="showInfo" @close="() => showInfo = false" />
 
   </div>
 </template>
+
 
 <script>
 import loading from "@/components/Home/loading.vue";
@@ -21,13 +25,34 @@ const defaultPrivateKey = "5JKFSKvJVjgRn4n3QRPoy4hSg76qZPXVnKuNcr3yhvXhpdMd5q2";
 const signatureProvider = new JsSignatureProvider([defaultPrivateKey]);
 const rpc = new JsonRpc('http://150.109.41.13:8888');
 const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
+import infos from "./gameInfo.vue";
+import Scatterutil from "../../utils/scatterutil";
 
 
 export default {
   
   data() {
     return {
+      // 热门任务数据
+      themeList: [
+        {
+          contenct: "测试任务?",
+          reward: "100 EOS",
+          isHot: true,
+          route:""
+        },
+        {
+          contenct: "开发任务?",
+          reward: "200 EOS",
+          isHot: false,
+          route:""
+        }
+      ],
       log:"",
+      id:"",
+      contenct:"",
+      reward:"",
+      showInfo:false,
       showLoading:false
     };
   },
@@ -35,59 +60,50 @@ export default {
     this.init();
   },
   components: {
-    loading
+    loading,
+    infos
   },
   methods: {
     init() {
-    //  var options = {broadcast: true} //不广播此笔交易
-    // api.transact({
-    //       actions: [{
-    //         account: 'eosio.token',
-    //         name: 'transfer',
-    //         authorization: [{
-    //           actor: 'test3',
-    //           permission: 'active',
-    //         }],
-    //         data: {
-    //           from: 'test3',
-    //           to: 'test1',
-    //           quantity:'0.0001 EOS',
-    //           memo: '123123',
-    //         },
-    //       }]
-    //     }, {
-    //       blocksBehind: 3,
-    //       expireSeconds: 30,
-    //     }).then(result => {
-		// 			console.log(` Transaction ID: ${result.transaction_id}`);
-
-		// 		}).catch(error => {
-		// 			console.log(error);
-		// 		});
-     
-
       var obj=this;
-    
 
-      rpc.get_block(1).then(result => 
-      syntax(result,obj)
-      )
+      rpc.get_table_rows({
+        code:"test3",
+        scope:"test3",
+        limit:20,
+        table:"task"
+      }).then(result=>{
+        obj.themeList=result.rows;
+      })
 
-      rpc.get_account("test3").then(result => 
-      syntax(result,obj))
+      Scatterutil.init().then(function(data) {
+        alert("初始化成功！");
+      });
 
-      rpc.get_currency_balance("eosio.token","test3","EOS").then(result => 
-      syntax(result,obj))
+      // rpc.get_block(1).then(result => 
+      // syntax(result,obj)
+      // )
 
-      rpc.get_currency_stats("eosio.token","EOS").then(result => 
-      syntax(result,obj))
+      // rpc.get_account("test3").then(result => 
+      // syntax(result,obj))
+
+      // rpc.get_currency_balance("eosio.token","test3","EOS").then(result => 
+      // syntax(result,obj))
+
+      // rpc.get_currency_stats("eosio.token","EOS").then(result => 
+      // syntax(result,obj))
+    },
+    receive(id){
+      this.showInfo=true;
+      this.id=id;
+      this.contenct=this.themeList[id].contenct;
+      this.reward=this.themeList[id].reward;
     },
     showgame(id) {
       this.$router.push("/themeDetail/"+id);
     }
   },
   filters: {
-   
   }
 };
 
@@ -124,13 +140,90 @@ function syntax(json,obj) {
 
 
 <style lang="scss">
- pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
-    .string { color: green; }
-    .number { color: darkorange; }
-    .boolean { color: blue; }
-    .null { color: magenta; }
-    .key { color: red;width: 100%; }
+.game-center {
+  width: 750px;
+  margin: 0 auto;
+  padding: 0 20px 140px;
   .item-title {
     font-size: 32px;
+    margin-top: 40px;
   }
+  /* 热门话题 */
+  .theme-list {
+    margin-top: 10px;
+    padding: 25px 0 25px 30px;
+    background: #fff;
+    box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    .theme-item {
+      display: flex;
+      align-items: center;
+      height: 60px;
+      font-size: 30px;
+      color: #233243;
+      .iconfont {
+        font-size: 26px;
+        color: #4a87fb;
+      }
+      .e-Shape {
+        color: #f02d63;
+      }
+      .title {
+        margin-left: 14px;
+        max-width: 440px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .num {
+        margin-left: 14px;
+        font-size: 26px;
+        color: #8993a4;
+      }
+    }
+  }
+  /* 更多好玩 */
+  .more-list {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .game-item {
+      display: block;
+      text-decoration: none;
+      width: 345px;
+      height: 200px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      &:nth-child(1) {
+        background: url("../../assets/images/game1.jpg") no-repeat center;
+        background-size: contain;
+      }
+      &:nth-child(2) {
+        background: url("../../assets/images/game2.jpg") no-repeat center;
+        background-size: contain;
+      }
+      &:nth-child(3) {
+        background: url("../../assets/images/game3.jpg") no-repeat center;
+        background-size: contain;
+      }
+
+      .title {
+        font-size: 32px;
+        color: #fff;
+        margin-top: 40px;
+        padding-left: 30px;
+      }
+      em {
+        padding: 0 8px;
+      }
+      .info {
+        margin-top: 6px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 26px;
+        padding-left: 30px;
+      }
+    }
+  }
+}
 </style>

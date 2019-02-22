@@ -9,7 +9,7 @@
         <svg class="icon" aria-hidden="true" v-show="activeNav===1">
           <use xlink:href="#e-Group"></use>
        </svg>
-        <span>Debug</span>
+        <span>任务中心</span>
       </div>
     </label>
     <label class="nav-item">

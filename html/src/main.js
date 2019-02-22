@@ -13,9 +13,7 @@ import "@/assets/font/iconfont.js"
 import eosutil from "./utils/eosutil";
 
 Vue.config.productionTip = false;
-Vue.prototype.$http = Axios;
-
-
+Vue.prototype.$http = Axios
 
 // Vue.prototype.$statterUtil = Scatterutil;
 Vue.prototype.$eosutil = eosutil;
